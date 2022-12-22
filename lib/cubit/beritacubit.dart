@@ -1,23 +1,20 @@
-import 'package:uas/cubit/beritastate.dart';
+import 'package:bloc/bloc.dart';
+import 'package:meta/meta.dart';
 import 'package:uas/model/beritamodel.dart';
 import 'package:uas/request/beritarequest.dart';
-import 'package:bloc/bloc.dart';
+
+part 'beritastate.dart';
 
 class BeritaCubit extends Cubit<BeritaState> {
   BeritaCubit() : super(BeritaInitial());
 
-  // Tambahakan Cubit BeritaRequest
   final BeritaRequest beritaRequest = BeritaRequest();
 
-  // Tambahakan Model BeritaModel
   BeritaModel beritaModel = BeritaModel();
 
-  // Tambahakan Function getDataBerita yang akan digunanan nanti di Screen
-  getDataResepMakanan() async {
+  getDataBerita() async {
     emit(BeritaInitial());
     beritaModel = await beritaRequest.getBerita();
     emit(DataBerita(beritaModel));
   }
-
-  void getDataBerita() {}
 }

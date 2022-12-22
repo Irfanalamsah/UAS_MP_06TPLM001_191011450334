@@ -1,97 +1,89 @@
 class BeritaModel {
-  String? status;
-  int? totalResults;
-  List<Articles>? articles;
+  bool? success;
+  Null? message;
+  Data? data;
 
-  BeritaModel({this.status, this.totalResults, this.articles});
+  BeritaModel({this.success, this.message, this.data});
 
   BeritaModel.fromJson(Map<String, dynamic> json) {
-    status = json['status'];
-    totalResults = json['totalResults'];
-    if (json['articles'] != null) {
-      articles = <Articles>[];
-      json['articles'].forEach((v) {
-        articles!.add(new Articles.fromJson(v));
+    success = json['success'];
+    message = json['message'];
+    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['success'] = this.success;
+    data['message'] = this.message;
+    if (this.data != null) {
+      data['data'] = this.data!.toJson();
+    }
+    return data;
+  }
+}
+
+class Data {
+  String? link;
+  String? image;
+  String? description;
+  String? title;
+  List<Posts>? posts;
+
+  Data({this.link, this.image, this.description, this.title, this.posts});
+
+  Data.fromJson(Map<String, dynamic> json) {
+    link = json['link'];
+    image = json['image'];
+    description = json['description'];
+    title = json['title'];
+    if (json['posts'] != null) {
+      posts = <Posts>[];
+      json['posts'].forEach((v) {
+        posts!.add(new Posts.fromJson(v));
       });
     }
   }
 
-  get results => null;
+  get length => null;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['totalResults'] = this.totalResults;
-    if (this.articles != null) {
-      data['articles'] = this.articles!.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
-}
-
-class Articles {
-  Source? source;
-  String? author;
-  String? title;
-  String? description;
-  String? url;
-  String? urlToImage;
-  String? publishedAt;
-  String? content;
-
-  Articles(
-      {this.source,
-      this.author,
-      this.title,
-      this.description,
-      this.url,
-      this.urlToImage,
-      this.publishedAt,
-      this.content});
-
-  Articles.fromJson(Map<String, dynamic> json) {
-    source =
-        json['source'] != null ? new Source.fromJson(json['source']) : null;
-    author = json['author'];
-    title = json['title'];
-    description = json['description'];
-    url = json['url'];
-    urlToImage = json['urlToImage'];
-    publishedAt = json['publishedAt'];
-    content = json['content'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.source != null) {
-      data['source'] = this.source!.toJson();
-    }
-    data['author'] = this.author;
-    data['title'] = this.title;
+    data['link'] = this.link;
+    data['image'] = this.image;
     data['description'] = this.description;
-    data['url'] = this.url;
-    data['urlToImage'] = this.urlToImage;
-    data['publishedAt'] = this.publishedAt;
-    data['content'] = this.content;
+    data['title'] = this.title;
+    if (this.posts != null) {
+      data['posts'] = this.posts!.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }
 
-class Source {
-  String? id;
-  String? name;
+class Posts {
+  String? link;
+  String? title;
+  String? pubDate;
+  String? description;
+  String? thumbnail;
 
-  Source({this.id, this.name});
+  Posts(
+      {this.link, this.title, this.pubDate, this.description, this.thumbnail});
 
-  Source.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
+  Posts.fromJson(Map<String, dynamic> json) {
+    link = json['link'];
+    title = json['title'];
+    pubDate = json['pubDate'];
+    description = json['description'];
+    thumbnail = json['thumbnail'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
+    data['link'] = this.link;
+    data['title'] = this.title;
+    data['pubDate'] = this.pubDate;
+    data['description'] = this.description;
+    data['thumbnail'] = this.thumbnail;
     return data;
   }
 }

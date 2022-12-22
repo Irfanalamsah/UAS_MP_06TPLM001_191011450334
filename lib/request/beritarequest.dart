@@ -1,5 +1,5 @@
-import 'package:uas/model/beritamodel.dart';
 import 'package:dio/dio.dart';
+import '../model/beritamodel.dart';
 
 class BeritaRequest {
   Future<BeritaModel> getBerita() async {

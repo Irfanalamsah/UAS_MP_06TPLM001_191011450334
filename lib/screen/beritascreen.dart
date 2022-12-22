@@ -1,13 +1,12 @@
-import 'package:uas/cubit/beritacubit.dart';
-import 'package:uas/screen/DetailBeritaScreen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../cubit/beritacubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BeritaScreen extends StatefulWidget {
   const BeritaScreen({super.key});
 
   @override
-  State<BeritaScreen> createState() => _BeritaScreenState();
+  _BeritaScreenState createState() => _BeritaScreenState();
 }
 
 class _BeritaScreenState extends State<BeritaScreen> {
@@ -26,31 +25,82 @@ class _BeritaScreenState extends State<BeritaScreen> {
         centerTitle: true,
         title: const Text('191011450334 - IRFAN ALAMSAH'),
       ),
-      body: ListView.builder(
-        itemCount: 5,
-        itemBuilder: (context, index) {
-          return ListTile(
-            leading: Container(
-              color: Colors.grey[200],
-              height: 100,
-              width: 100,
-              child: Image.network(
-                  'https://cdn0-production-images-kly.akamaized.net/OdMmSOPlFrNEXsiG4RhI0sDdNi4=/1280x720/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/18924/original/google-130724c.jpg'),
-            ),
-            title: Text('Android Akan Dilengkapi Fitur Sensor Gerak?'
-                /*beritaCubit.beritaModel.results![index].title!,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-              ),*/
-                ),
-            subtitle: Text('12 - 21 - 2022'),
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (c) => DetailBeritaScreen()));
-            },
-          );
-        },
-      ),
+      body: BlocBuilder<BeritaCubit, BeritaState>(
+          bloc: beritaCubit,
+          builder: (context, state) {
+            if (state is BeritaInitial) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            return ListView.builder(
+              padding: EdgeInsets.symmetric(
+                horizontal: 10,
+                vertical: 10,
+              ),
+              itemCount: beritaCubit.beritaModel.data?.posts?.length ?? 0,
+              itemBuilder: (context, index) {
+                return Card(
+                  child: ListTile(
+                    contentPadding: EdgeInsets.symmetric(
+                      vertical: 18,
+                      horizontal: 18,
+                    ),
+                    title: Row(
+                      children: [
+                        Container(
+                          width: 90,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Image.network(beritaCubit
+                              .beritaModel.data!.posts![index].thumbnail!),
+                        ),
+                        SizedBox(
+                          width: 210,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Column(
+                              children: [
+                                Text(
+                                  beritaCubit
+                                      .beritaModel.data!.posts![index].title!,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 3,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    bottom: 15,
+                                    top: 15,
+                                  ),
+                                  child: Text(
+                                    beritaCubit.beritaModel.data!.posts![index]
+                                        .pubDate!,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
+                                ),
+                                Text(
+                                  beritaCubit.beritaModel.data!.posts![index]
+                                      .description!,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 3,
+                                )
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+          }),
     );
   }
 }
